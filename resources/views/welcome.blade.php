@@ -517,8 +517,7 @@
                 iframe,
                 embed,
                 object {
-                    vertical-align: middle;
-                    display: block
+                     display: block
                 }
 
                 img,
