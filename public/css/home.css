@@ -1,0 +1,915 @@
+ /* OptiFit homepage — faithful hand-coded adaptation of the selected reference.
+ * Separate from style.css, so auth and gym-owner pages keep working unchanged.
+ */
+ .home-page {
+     background: #091014
+ }
+
+ .home-page .site-header {
+     position: absolute;
+     z-index: 30;
+     top: 16px;
+     right: 0;
+     left: 0;
+     padding: 0
+ }
+
+ .home-page .header-inner {
+     max-width: 1200px;
+     height: 70px;
+     background: rgba(9, 17, 19, .80);
+     border: 1px solid #e9f6e41c;
+     border-radius: 17px;
+     box-shadow: 0 8px 40px rgba(0, 0, 0, .22);
+     padding-inline: 24px;
+     backdrop-filter: blur(18px)
+ }
+
+ .home-page .main-nav a {
+     font-size: 13px;
+     font-weight: 600
+ }
+
+ .home-page .main-nav {
+     gap: 41px
+ }
+
+ .home-page .main-nav a[aria-current=page]:after {
+     bottom: -19px
+ }
+
+ .home-page .header-action {
+     font-size: 12px;
+     color: #dce7df;
+     border-color: rgba(189, 255, 151, .20);
+     background: rgba(0, 0, 0, .12)
+ }
+
+ .home-page .header-action:hover {
+     border-color: var(--lime)
+ }
+
+ .home-page .logo {
+     font-size: 26px
+ }
+
+ .home-page .brand-icon {
+     width: 39px;
+     height: 39px
+ }
+
+ .hero-stage {
+     height: clamp(590px, 73vh, 765px);
+     min-height: 590px;
+     position: relative;
+     isolation: isolate;
+     background: #0b1315;
+     overflow: hidden;
+     border-bottom: 1px solid rgba(255, 255, 255, .10)
+ }
+
+ .hero-backdrop {
+     position: absolute;
+     inset: 0;
+     z-index: -3;
+     background-image: url('../assets/hero-wide.webp');
+     background-size: cover;
+     background-repeat: no-repeat;
+     background-position: center 45%
+ }
+
+ .hero-shade {
+     position: absolute;
+     inset: 0;
+     z-index: -2;
+     background: linear-gradient(90deg, rgba(4, 10, 12, 0) 0%, rgba(7, 14, 16, .06) 31%, rgba(7, 14, 16, .26) 47%, rgba(7, 14, 16, .62) 68%, rgba(7, 14, 16, .66) 100%), linear-gradient(0deg, #091014f7 0%, rgba(6, 13, 15, .12) 28%, transparent 80%)
+ }
+
+ .stage-inner {
+     position: relative;
+     height: 100%;
+     max-width: 1360px
+ }
+
+ .home-page .hero-copy {
+     position: absolute;
+     top: 52%;
+     right: 0;
+     transform: translateY(-43%);
+     z-index: 2;
+     width: min(50%, 660px);
+     padding: 0
+ }
+
+ .home-page .eyebrow {
+     display: flex;
+     align-items: center;
+     gap: 13px;
+     font-size: 16px;
+     font-weight: 600;
+     color: #e8f1eb
+ }
+
+ .home-page .eyebrow:before {
+     width: 37px;
+     order: 0
+ }
+
+ .home-page .hero-copy h1 {
+     font-size: clamp(51px, 4.75vw, 78px);
+     line-height: 1.22;
+     font-weight: 900;
+     margin: 21px 0 18px;
+     letter-spacing: -2px;
+     max-width: 650px;
+     text-wrap: balance
+ }
+
+ .home-page .hero-copy h1 span {
+     color: var(--lime);
+     display: block
+ }
+
+ .home-page .hero-copy .desc {
+     font-size: clamp(14px, 1.18vw, 18px);
+     color: #dae2dd;
+     line-height: 1.95;
+     font-weight: 500;
+     max-width: 610px;
+     margin-bottom: 31px;
+     text-wrap: pretty
+ }
+
+ .home-page .hero-copy .desc b {
+     font-weight: 800;
+     color: #fff
+ }
+
+ .home-page .hero-ctas {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 13px;
+     align-items: center
+ }
+
+ .home-page .btn {
+     font-size: 13px;
+     min-height: 55px;
+     padding: 12px 21px;
+     border-radius: 11px;
+     white-space: nowrap
+ }
+
+ .home-page .btn-quiet {
+     background: #0c171ad6;
+     border: 1px solid #c2d2cb9c
+ }
+
+ .home-page .btn-quiet:hover {
+     border-color: var(--lime)
+ }
+
+ .home-page .btn-primary {
+     background: var(--lime);
+     border-color: var(--lime);
+     min-width: 160px
+ }
+
+ .home-page .btn .ico {
+     width: 19px;
+     height: 19px
+ }
+
+ .floating-dashboard {
+     position: absolute;
+     left: 27%;
+     top: 24%;
+     width: min(315px, 28%);
+     z-index: 4;
+     padding: 22px;
+     background: linear-gradient(125deg, rgba(25, 41, 45, .78), rgba(10, 21, 24, .80) 50%, rgba(24, 34, 39, .73));
+     border: 1px solid rgba(233, 250, 248, .29);
+     border-radius: 21px;
+     box-shadow: 0 30px 75px #0009, 0 1px #fff2 inset;
+     backdrop-filter: blur(26px);
+     -webkit-backdrop-filter: blur(26px);
+     transform: perspective(1000px) rotateY(-7deg) rotateX(2deg);
+     transition: transform .3s ease
+ }
+
+ .floating-dashboard:hover {
+     transform: perspective(1000px) rotateY(-2deg) translateY(-4px)
+ }
+
+ .dash-top {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 12px;
+     margin-bottom: 20px
+ }
+
+ .dash-top strong {
+     font-size: 13px;
+     color: #f7f9f4
+ }
+
+ .dash-more {
+     color: #a0aba7;
+     letter-spacing: 2px;
+     font-size: 21px;
+     line-height: 10px
+ }
+
+ .dash-main {
+     display: flex;
+     gap: 12px;
+     align-items: center;
+     justify-content: space-between
+ }
+
+ .dash-list {
+     display: grid;
+     gap: 15px;
+     min-width: 0;
+     flex: 1
+ }
+
+ .dash-metric {
+     display: flex;
+     align-items: center;
+     gap: 9px
+ }
+
+ .dash-metric .ico {
+     width: 17px;
+     height: 17px;
+     color: #e4f9d3
+ }
+
+ .dash-metric div {
+     line-height: 1.15
+ }
+
+ .dash-metric strong {
+     display: block;
+     direction: ltr;
+     font-family: Arial, sans-serif;
+     font-weight: 700;
+     text-align: right;
+     font-size: 16px
+ }
+
+ .dash-metric small {
+     display: block;
+     font-size: 9px;
+     color: #aebbb6;
+     margin-top: 4px;
+     white-space: nowrap
+ }
+
+ .dash-ring {
+     width: 112px;
+     height: 112px;
+     border-radius: 50%;
+     background: conic-gradient(var(--lime) 0 72%, #ffffff25 72% 100%);
+     padding: 9px;
+     display: grid;
+     place-items: center;
+     flex-shrink: 0
+ }
+
+ .dash-ring>div {
+     background: #172428;
+     border-radius: 50%;
+     width: 100%;
+     height: 100%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-direction: column;
+     gap: 4px
+ }
+
+ .dash-ring b {
+     font-family: Arial, sans-serif;
+     font-size: 24px;
+     line-height: 1
+ }
+
+ .dash-ring span {
+     font-size: 10px;
+     color: #b3c2bd
+ }
+
+ .dash-gym {
+     display: flex;
+     align-items: center;
+     gap: 11px;
+     margin-top: 22px;
+     border-top: 1px solid #ffffff27;
+     padding-top: 17px
+ }
+
+ .dash-thumb {
+     width: 85px;
+     height: 65px;
+     border: 1px solid #ffffff20;
+     border-radius: 8px;
+     background: url('../assets/gym-card.webp') center 62%/cover;
+     flex-shrink: 0
+ }
+
+ .dash-gym>div:nth-child(2) {
+     display: flex;
+     flex-direction: column;
+     gap: 2px;
+     flex: 1
+ }
+
+ .dash-gym small {
+     font-size: 10px;
+     color: #b4c0b7
+ }
+
+ .dash-gym strong {
+     font-size: 13px
+ }
+
+ .dash-gym span {
+     color: #b5c6bd;
+     font-size: 10px;
+     display: inline-flex;
+     gap: 3px;
+     align-items: center
+ }
+
+ .dash-gym span .ico {
+     width: 11px;
+     height: 11px
+ }
+
+ .dash-circle {
+     width: 25px;
+     height: 25px;
+     border-radius: 50%;
+     background: #ffffff17;
+     display: grid;
+     place-items: center;
+     font-size: 19px !important
+ }
+
+ .hero-bottom-line {
+     position: absolute;
+     left: 0;
+     bottom: 0;
+     width: 100%;
+     height: 2px;
+     background: linear-gradient(90deg, transparent, rgba(189, 255, 124, .20), transparent)
+ }
+
+ .showcase {
+     background: #0a1215;
+     padding: 18px 0 26px;
+     position: relative;
+     z-index: 2
+ }
+
+ .home-page .feature-cards {
+     max-width: 1400px;
+     width: min(1400px, calc(100% - 52px));
+     display: grid;
+     grid-template-columns: repeat(3, minmax(0, 1fr));
+     gap: 16px
+ }
+
+ .show-card {
+     position: relative;
+     min-height: 216px;
+     display: flex;
+     justify-content: space-between;
+     overflow: hidden;
+     padding: 22px 21px 20px;
+     background: linear-gradient(125deg, #182326ef, #0d171bee);
+     border: 1px solid rgba(255, 255, 255, .09);
+     border-radius: 16px;
+     gap: 6px;
+     transition: transform .23s, border-color .23s, box-shadow .23s
+ }
+
+ .show-card:hover {
+     transform: translateY(-5px);
+     border-color: #adff3655;
+     box-shadow: 0 13px 32px #0007
+ }
+
+ .show-info {
+     position: relative;
+     z-index: 1;
+     display: flex;
+     flex-direction: column;
+     align-items: flex-start;
+     min-width: 0;
+     flex: 1
+ }
+
+ .show-icon {
+     width: 40px;
+     height: 40px;
+     display: grid;
+     place-items: center;
+     border-radius: 11px;
+     background: #e1f1d8;
+     color: #14241b;
+     margin-bottom: 16px
+ }
+
+ .show-icon .ico {
+     width: 21px;
+     height: 21px
+ }
+
+ .show-card h2 {
+     font-size: 20px;
+     line-height: 1.35;
+     font-weight: 800;
+     margin: 0 0 8px;
+     white-space: normal
+ }
+
+ .show-card p {
+     font-size: 12px;
+     line-height: 1.7;
+     color: #c1ccc8;
+     margin: 0 0 13px;
+     max-width: 260px
+ }
+
+ .show-link {
+     margin-top: auto;
+     color: var(--lime);
+     display: inline-flex;
+     gap: 9px;
+     align-items: center;
+     font-size: 12px;
+     font-weight: 800;
+     transition: gap .2s
+ }
+
+ .show-link:hover {
+     gap: 14px
+ }
+
+ .show-link .ico {
+     height: 15px;
+     width: 15px
+ }
+
+ .show-visual {
+     height: 100%;
+     width: 36%;
+     border-radius: 11px;
+     overflow: hidden;
+     flex-shrink: 0;
+     align-self: stretch;
+     background: #0e1819
+ }
+
+ .plan-photo {
+     background: linear-gradient(0deg, #0b111a22, transparent), url('../assets/athlete.webp') 72% 43%/cover;
+     filter: contrast(1.1)
+ }
+
+ .club-photo {
+     background: linear-gradient(0deg, #07101228, transparent), url('../assets/gym-card.webp') 50% 53%/cover;
+     filter: contrast(1.08)
+ }
+
+ .chart-panel {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-direction: column;
+     background: linear-gradient(#ffffff08, #070e10 75%);
+     border: 1px solid #ffffff08
+ }
+
+ .chart-tag {
+     font-family: Arial, sans-serif;
+     color: #dbf9d2;
+     font-size: 12px;
+     display: block;
+     margin-bottom: 10px;
+     padding: 4px 7px;
+     border-radius: 7px;
+     background: #ffffff14
+ }
+
+ .chart-bars {
+     display: flex;
+     gap: 8px;
+     align-items: end;
+     height: 88px;
+     justify-content: center
+ }
+
+ .chart-bars i {
+     width: 15px;
+     height: var(--h);
+     background: linear-gradient(#b5ff5e, #426f3480 80%, transparent);
+     border-radius: 5px 5px 0 0;
+     box-shadow: 0 0 10px #a9fd3410
+ }
+
+ .chart-bars i:nth-child(1) {
+     --h: 43px
+ }
+
+ .chart-bars i:nth-child(2) {
+     --h: 74px
+ }
+
+ .chart-bars i:nth-child(3) {
+     --h: 60px
+ }
+
+ .chart-bars i:nth-child(4) {
+     --h: 91px
+ }
+
+ .chart-bars i:nth-child(5) {
+     --h: 53px
+ }
+
+ .about-strip {
+     background: #090f12;
+     border-top: 1px solid #ffffff15;
+     padding: 29px 0
+ }
+
+ .about-inner {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 18px;
+     color: #9daea6;
+     font-size: 12px
+ }
+
+ .about-inner>span {
+     font-family: Arial, sans-serif;
+     font-size: 18px;
+     font-weight: 800;
+     color: #e8f6e5
+ }
+
+ .about-inner p {
+     margin: 0
+ }
+
+ .about-inner div {
+     display: flex;
+     gap: 24px
+ }
+
+ .about-inner a:hover {
+     color: var(--lime)
+ }
+
+ @media(max-width:1200px) {
+     .home-page .hero-copy {
+         width: 48%;
+         right: 0
+     }
+
+     .home-page .hero-copy h1 {
+         font-size: clamp(47px, 5.15vw, 65px)
+     }
+
+     .floating-dashboard {
+         left: 25%;
+         width: 300px;
+         top: 27%
+     }
+
+     .home-page .hero-copy .desc {
+         font-size: 14px
+     }
+
+     .home-page .btn {
+         padding: 10px 13px;
+         min-height: 50px
+     }
+
+     .show-card {
+         padding: 17px
+     }
+
+     .show-card h2 {
+         font-size: 17px
+     }
+
+     .show-card p {
+         font-size: 11px
+     }
+ }
+
+ @media(max-width:900px) {
+     .hero-stage {
+         height: 700px
+     }
+
+     .hero-backdrop {
+         background-position: 25% center
+     }
+
+     .home-page .hero-copy {
+         top: 49%;
+         width: 56%;
+         transform: translateY(-40%)
+     }
+
+     .home-page .hero-copy h1 {
+         font-size: clamp(43px, 5.3vw, 55px)
+     }
+
+     .floating-dashboard {
+         left: 22%;
+         top: 31%;
+         width: 245px;
+         padding: 15px;
+         transform: none
+     }
+
+     .floating-dashboard:hover {
+         transform: translateY(-3px)
+     }
+
+     .dash-ring {
+         width: 75px;
+         height: 75px;
+         padding: 7px
+     }
+
+     .dash-ring b {
+         font-size: 17px
+     }
+
+     .dash-ring span {
+         font-size: 8px
+     }
+
+     .dash-metric strong {
+         font-size: 12px
+     }
+
+     .dash-metric small {
+         font-size: 8px
+     }
+
+     .dash-gym {
+         margin-top: 13px;
+         padding-top: 12px
+     }
+
+     .dash-thumb {
+         width: 58px;
+         height: 48px
+     }
+
+     .home-page .feature-cards {
+         grid-template-columns: repeat(2, minmax(0, 1fr))
+     }
+
+     .show-card {
+         min-height: 210px
+     }
+ }
+
+ @media(max-width:800px) {
+     .home-page .site-header {
+         top: 10px
+     }
+
+     .home-page .header-inner {
+         height: 64px
+     }
+
+     .home-page .main-nav {
+         position: absolute;
+         top: 75px;
+         right: 18px;
+         left: 18px;
+         z-index: 40;
+         display: none;
+         flex-direction: column;
+         align-items: stretch;
+         gap: 0;
+         background: #132025ee;
+         backdrop-filter: blur(20px);
+         border: 1px solid #ffffff2d;
+         padding: 14px;
+         border-radius: 13px
+     }
+
+     .home-page .main-nav.open {
+         display: flex
+     }
+
+     .home-page .main-nav a {
+         padding: 12px
+     }
+
+     .home-page .main-nav a[aria-current=page]:after {
+         display: none
+     }
+
+     .home-page .header-action {
+         margin-inline-start: auto
+     }
+
+     .home-page .mobile-menu-toggle {
+         display: block
+     }
+
+     .hero-stage {
+         height: auto;
+         min-height: 925px
+     }
+
+     .hero-backdrop {
+         background-image: url('../assets/athlete.webp');
+         background-position: center 15%;
+         background-size: cover;
+         opacity: .53
+     }
+
+     .hero-shade {
+         background: linear-gradient(180deg, #07111455 0%, #061014b3 43%, #071013 88%), linear-gradient(90deg, #070e10c9, transparent 70%)
+     }
+
+     .stage-inner {
+         height: 925px
+     }
+
+     .home-page .hero-copy {
+         width: 100%;
+         top: 145px;
+         transform: none;
+         right: 0;
+         padding: 0 4px;
+         text-align: right
+     }
+
+     .home-page .hero-copy h1 {
+         font-size: clamp(42px, 7.5vw, 60px);
+         max-width: 500px
+     }
+
+     .home-page .hero-copy .desc {
+         max-width: 590px;
+         font-size: 14px;
+         line-height: 2.1
+     }
+
+     .floating-dashboard {
+         left: auto;
+         right: calc(50% - 150px);
+         top: auto;
+         bottom: 47px;
+         width: 300px;
+         transform: none
+     }
+
+     .home-page .feature-cards {
+         grid-template-columns: 1fr;
+         gap: 14px
+     }
+
+     .show-card {
+         min-height: 205px;
+         padding: 22px
+     }
+
+     .show-visual {
+         width: 30%
+     }
+ }
+
+ @media(max-width:520px) {
+     .home-page .site-header {
+         top: 7px
+     }
+
+     .home-page .header-inner {
+         height: 62px;
+         padding-inline: 14px
+     }
+
+     .home-page .logo {
+         font-size: 24px
+     }
+
+     .home-page .brand-icon {
+         height: 32px;
+         width: 32px
+     }
+
+     .home-page .header-action {
+         font-size: 11px;
+         padding: 8px 10px
+     }
+
+     .hero-stage {
+         min-height: 862px
+     }
+
+     .stage-inner {
+         height: 862px
+     }
+
+     .hero-backdrop {
+         background-position: center 28%;
+         opacity: .45
+     }
+
+     .home-page .hero-copy {
+         top: 124px
+     }
+
+     .home-page .eyebrow {
+         font-size: 12px
+     }
+
+     .home-page .hero-copy h1 {
+         font-size: clamp(37px, 9vw, 51px);
+         line-height: 1.32;
+         margin: 12px 0 12px
+     }
+
+     .home-page .hero-copy .desc {
+         font-size: 12px;
+         line-height: 2.05;
+         margin-bottom: 20px
+     }
+
+     .home-page .hero-ctas {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         gap: 9px;
+         max-width: 500px
+     }
+
+     .home-page .hero-ctas .btn:last-child {
+         grid-column: 1 / -1
+     }
+
+     .home-page .btn {
+         font-size: 11px;
+         padding: 8px;
+         min-height: 48px;
+         gap: 6px
+     }
+
+     .floating-dashboard {
+         right: calc(50% - 145px);
+         width: 290px;
+         bottom: 30px
+     }
+
+     .home-page .feature-cards {
+         width: calc(100% - 28px)
+     }
+
+     .show-card {
+         padding: 18px;
+         min-height: 206px
+     }
+
+     .show-card h2 {
+         font-size: 18px
+     }
+
+     .show-card p {
+         font-size: 11px
+     }
+
+     .show-visual {
+         width: 32%
+     }
+
+     .about-inner {
+         flex-wrap: wrap;
+         justify-content: center;
+         text-align: center
+     }
+ }
+
+ @media(prefers-reduced-motion:reduce) {
+
+     .floating-dashboard,
+     .show-card,
+     .show-link {
+         transition: none !important
+     }
+ }

@@ -12,7 +12,11 @@ class GoogleAuthController extends Controller
 {
     public function redirect()
     {
-        return Socialite::driver('google')->redirect();
+        $url = Socialite::driver('google')->redirect()->getTargetUrl();
+
+        $url .= '&prompt=select_account';
+
+        return redirect()->away($url);
     }
 
     public function callback()
