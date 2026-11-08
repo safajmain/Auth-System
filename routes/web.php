@@ -2,6 +2,13 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GymOwnerRegistrationController;
+use App\Http\Controllers\AdminGymController;
+use App\Http\Controllers\FavoriteGymController;
+use App\Http\Controllers\GymDirectoryController;
+use App\Http\Controllers\GymReviewController;
+use App\Http\Controllers\OwnerGymController;
+use App\Http\Controllers\OwnerGymDetailsController;
+use App\Http\Controllers\ReminderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleAuthController;
 Route::get('/', function () {
@@ -41,7 +48,9 @@ Route::get('/user/personal', function () {
 
     abort_unless(auth()->user()->role_id == 1, 403);
 
-    return view('optifit.user.personal');
+    $preference = auth()->user()->preferences()->first();
+
+    return view('optifit.user.personal', compact('preference'));
 
 })->middleware(['auth', 'verified'])->name('user.personal');
 
@@ -70,8 +79,8 @@ Route::post('/user/personal', function (\Illuminate\Http\Request $request) {
         ]
     );
 
-    return redirect()->route('user.personal')
-        ->with('success', 'تم حفظ البيانات بنجاح');
+   return redirect()->route('user.activities')
+    ->with('success', 'تم حفظ البيانات بنجاح');
 
 })->middleware(['auth', 'verified'])
   ->name('user.personal.store');
@@ -79,7 +88,11 @@ Route::post('/user/personal', function (\Illuminate\Http\Request $request) {
 Route::get('/user/activities', function () {
     abort_unless((int) auth()->user()->role_id === 1, 403);
 
-    return view('optifit.user.activities');
+    $selectedActivities = auth()->user()->preferredActivities()
+        ->pluck('activity_name')
+        ->all();
+
+    return view('optifit.user.activities', compact('selectedActivities'));
 })->middleware(['auth', 'verified'])->name('user.activities');
 
 Route::post('/user/activities', function (\Illuminate\Http\Request $request) {
@@ -131,8 +144,8 @@ Route::post('/user/activities', function (\Illuminate\Http\Request $request) {
             ->insert($records);
     });
 
-    return redirect()->route('user.activities')
-        ->with('success', 'تم حفظ الأنشطة بنجاح');
+    return redirect()->route('user.facilities')
+    ->with('success', 'تم حفظ الأنشطة بنجاح');
 
 })->middleware(['auth', 'verified'])
   ->name('user.activities.store');
@@ -140,7 +153,11 @@ Route::post('/user/activities', function (\Illuminate\Http\Request $request) {
 Route::get('/user/facilities', function () {
     abort_unless((int) auth()->user()->role_id === 1, 403);
 
-    return view('optifit.user.facilities');
+    $selectedFacilities = auth()->user()->preferredFacilities()
+        ->pluck('facility_name')
+        ->all();
+
+    return view('optifit.user.facilities', compact('selectedFacilities'));
 })->middleware(['auth', 'verified'])->name('user.facilities');
 
 Route::post('/user/facilities', function (\Illuminate\Http\Request $request) {
@@ -194,10 +211,135 @@ Route::post('/user/facilities', function (\Illuminate\Http\Request $request) {
             ->insert($records);
     });
 
-    return redirect()->route('user.facilities')
-        ->with('success', 'تم حفظ المرافق بنجاح');
+    return redirect()->route('user.times')
+    ->with('success', 'تم حفظ المرافق بنجاح');
 
 })->middleware(['auth', 'verified'])
   ->name('user.facilities.store');
+// عرض صفحة الأوقات المتاحة
+Route::get('/user/times', function () {
+
+    abort_unless((int) auth()->user()->role_id === 1, 403);
+
+    $times = \Illuminate\Support\Facades\DB::table('user_available_times')
+        ->where('user_id', auth()->id())
+        ->orderBy('available_time_id')
+        ->get();
+
+    return view('optifit.user.times', compact('times'));
+
+})->middleware(['auth', 'verified'])->name('user.times');
+
+
+// حفظ فترة تدريب جديدة
+Route::post('/user/times', function (\Illuminate\Http\Request $request) {
+
+    abort_unless((int) $request->user()->role_id === 1, 403);
+
+    $data = $request->validate([
+        'day' => [
+            'required',
+            \Illuminate\Validation\Rule::in([
+                'الأحد',
+                'الاثنين',
+                'الثلاثاء',
+                'الأربعاء',
+                'الخميس',
+                'الجمعة',
+                'السبت',
+                'الأحد',
+                'الاثنين',
+                'الثلاثاء',
+                'الأربعاء',
+                'الخميس',
+                'الجمعة',
+                'السبت',
+            ]),
+        ],
+        'start' => 'required|date_format:H:i',
+        'end' => 'required|date_format:H:i|after:start',
+    ]);
+
+    \Illuminate\Support\Facades\DB::table('user_available_times')->insert([
+        'user_id' => $request->user()->id,
+        'day_of_week' => $data['day'],
+        'start_time' => $data['start'],
+        'end_time' => $data['end'],
+    ]);
+
+    return redirect()->route('user.times')
+        ->with('success', 'تم حفظ الفترة بنجاح');
+
+})->middleware(['auth', 'verified'])->name('user.times.store');
+// حذف فترة تدريب خاصة بالمستخدم
+Route::delete('/user/times/{id}', function (
+    \Illuminate\Http\Request $request,
+    $id
+) {
+    abort_unless((int) $request->user()->role_id === 1, 403);
+
+    \Illuminate\Support\Facades\DB::table('user_available_times')
+        ->where('available_time_id', $id)
+        ->where('user_id', $request->user()->id)
+        ->delete();
+
+    return redirect()->route('user.times')
+        ->with('success', 'تم حذف الفترة بنجاح');
+
+})->middleware(['auth', 'verified'])->name('user.times.destroy');
+
+Route::middleware(['auth', 'verified', 'role:2'])
+    ->prefix('owner')
+    ->name('owner.')
+    ->group(function () {
+        Route::resource('gyms', OwnerGymController::class);
+        Route::put('gyms/{gym}/facilities', [OwnerGymDetailsController::class, 'facilities'])
+            ->name('gyms.facilities.update');
+        Route::put('gyms/{gym}/activities', [OwnerGymDetailsController::class, 'activities'])
+            ->name('gyms.activities.update');
+        Route::post('gyms/{gym}/memberships', [OwnerGymDetailsController::class, 'storeMembership'])
+            ->name('gyms.memberships.store');
+        Route::delete('gyms/{gym}/memberships/{membership}', [OwnerGymDetailsController::class, 'destroyMembership'])
+            ->name('gyms.memberships.destroy');
+        Route::post('gyms/{gym}/hours', [OwnerGymDetailsController::class, 'storeHour'])
+            ->name('gyms.hours.store');
+        Route::delete('gyms/{gym}/hours/{hour}', [OwnerGymDetailsController::class, 'destroyHour'])
+            ->name('gyms.hours.destroy');
+        Route::post('gyms/{gym}/images', [OwnerGymDetailsController::class, 'storeImage'])
+            ->name('gyms.images.store');
+        Route::delete('gyms/{gym}/images/{image}', [OwnerGymDetailsController::class, 'destroyImage'])
+            ->name('gyms.images.destroy');
+    });
+
+Route::middleware(['auth', 'verified', 'role:1'])->group(function () {
+    Route::get('/gyms', [GymDirectoryController::class, 'index'])->name('gyms.index');
+    Route::get('/gyms/compare', [GymDirectoryController::class, 'compare'])->name('gyms.compare');
+    Route::get('/gyms/map', [GymDirectoryController::class, 'map'])->name('gyms.map');
+    Route::get('/assistant', [GymDirectoryController::class, 'assistant'])->name('assistant.index');
+    Route::get('/gyms/{gym}', [GymDirectoryController::class, 'show'])->name('gyms.show');
+
+    Route::get('/favorites', [FavoriteGymController::class, 'index'])->name('favorites.index');
+    Route::post('/gyms/{gym}/favorite', [FavoriteGymController::class, 'store'])->name('favorites.store');
+    Route::delete('/gyms/{gym}/favorite', [FavoriteGymController::class, 'destroy'])->name('favorites.destroy');
+
+    Route::post('/gyms/{gym}/reviews', [GymReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/gyms/{gym}/reviews/{review}', [GymReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    Route::get('/reminders', [ReminderController::class, 'index'])->name('reminders.index');
+    Route::post('/reminders', [ReminderController::class, 'store'])->name('reminders.store');
+    Route::put('/reminders/{reminder}', [ReminderController::class, 'update'])->name('reminders.update');
+    Route::patch('/reminders/{reminder}/toggle', [ReminderController::class, 'toggle'])->name('reminders.toggle');
+    Route::delete('/reminders/{reminder}', [ReminderController::class, 'destroy'])->name('reminders.destroy');
+});
+
+Route::middleware(['auth', 'verified', 'role:3'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/gyms', [AdminGymController::class, 'index'])->name('gyms.index');
+        Route::get('/gyms/{gym}', [AdminGymController::class, 'show'])->name('gyms.show');
+        Route::patch('/gyms/{gym}/status', [AdminGymController::class, 'updateStatus'])->name('gyms.status');
+    });
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/optifit_apex_preview.php';

@@ -28,4 +28,9 @@ class GymWorkingHour extends Model
             'gym_id'
         );
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'working_hour_id';
+    }
 }

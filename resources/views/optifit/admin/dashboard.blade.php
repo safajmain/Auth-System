@@ -1,65 +1,26 @@
-<!DOCTYPE html>
-
-
-<html data-role="admin" data-static-pages="1" data-view="dashboard" dir="rtl" lang="ar">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<meta content="#0b1219" name="theme-color"/>
-<title>لوحة الإدارة | OptiFit</title>
-<link href="{{ asset('optifit/css/admin/dashboard.css') }}" rel="stylesheet"/>
-<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
-  <meta name="csrf-token" content="{{ csrf_token() }}"/>
-</head>
-<body>
-<!-- All SVG icons are embedded locally. No external JavaScript or build tools required. -->
-<svg aria-hidden="true" style="display:none" xmlns="http://www.w3.org/2000/svg">
-<symbol id="i-grid" viewbox="0 0 24 24"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></symbol>
-<symbol id="i-shield" viewbox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"></path><path d="m9 12 2 2 4-4"></path></symbol>
-<symbol id="i-users" viewbox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></symbol>
-<symbol id="i-building" viewbox="0 0 24 24"><rect height="15" rx="2" width="18" x="3" y="6"></rect><path d="M8 21V3h8v18M7 10h2m-2 4h2m6-4h2m-2 4h2"></path></symbol>
-<symbol id="i-list" viewbox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></symbol>
-<symbol id="i-dumbbell" viewbox="0 0 24 24"><path d="m6.5 6.5 11 11M2.5 9 9 2.5M15 21.5 21.5 15M4.5 12l8-8M12 19.5l8-8"></path></symbol>
-<symbol id="i-dumbbell2" viewbox="0 0 24 24"><path d="M6 6v12M3 9v6m15-9v12m3-9v6M6 12h12"></path></symbol>
-<symbol id="i-check" viewbox="0 0 24 24"><path d="m20 6-11 11-5-5"></path></symbol>
-<symbol id="i-checkcircle" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></symbol>
-<symbol id="i-clock" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></symbol>
-<symbol id="i-settings" viewbox="0 0 24 24"><path d="M4 7h16M4 17h16"></path><circle cx="9" cy="7" fill="#14212a" r="2"></circle><circle cx="15" cy="17" fill="#14212a" r="2"></circle></symbol>
-<symbol id="i-calendar" viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="5"></rect><path d="M7 3v4m10-4v4M3 10h18"></path></symbol>
-<symbol id="i-pin" viewbox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></symbol>
-<symbol id="i-search" viewbox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></symbol>
-<symbol id="i-download" viewbox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"></path></symbol>
-<symbol id="i-close" viewbox="0 0 24 24"><path d="M5 5 19 19M19 5 5 19"></path></symbol>
-<symbol id="i-pencil" viewbox="0 0 24 24"><path d="m15 5 4 4M4 20l5-.9L20 8a3 3 0 0 0-4-4L5 15l-1 5Z"></path></symbol>
-<symbol id="i-alert" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6m0 4h.01"></path></symbol>
-<symbol id="i-file" viewbox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path><path d="M14 2v6h6M8 13h8M8 17h8"></path></symbol>
-<symbol id="i-plus" viewbox="0 0 24 24"><path d="M12 4v16M4 12h16"></path></symbol>
-<symbol id="i-arrow" viewbox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"></path></symbol>
-<symbol id="i-spark" viewbox="0 0 24 24"><path d="m12 3 1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8Z"></path></symbol>
-<symbol id="i-eye" viewbox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></symbol>
-<symbol id="i-rotate" viewbox="0 0 24 24"><path d="M3 11a9 9 0 1 1 2 7M3 4v7h7"></path></symbol>
-</svg>
-<header class="topbar">
-<div class="top-start">
-<div class="experience"><span class="dot"></span> تجربة المنصة التفاعلية <span class="demo-label">نسخة تجريبية</span></div>
-<span class="top-divider"></span>
-<div aria-label="تبديل الواجهة التجريبية" class="role-switch" role="group">
-<button aria-pressed="false" class="role" data-role="user" type="button" disabled="disabled" title="هذه الواجهة مخصصة لدور آخر"><svg class="icon"><use href="#i-users"></use></svg> مستخدم</button>
-<button aria-pressed="false" class="role" data-role="owner" type="button" disabled="disabled" title="هذه الواجهة مخصصة لدور آخر"><svg class="icon"><use href="#i-building"></use></svg> صاحب جيم</button>
-<button aria-pressed="true" class="role active" data-role="admin" type="button"><svg class="icon"><use href="#i-shield"></use></svg> مدير النظام</button>
-</div>
-</div>
-<button class="catalog" data-action="catalog" type="button"><svg class="icon"><use href="#i-grid"></use></svg> فهرس الشاشات</button>
-</header>
-<nav aria-label="التنقل الرئيسي" class="navbar">
-<div class="brand"><span class="logo-mark"><svg class="icon"><use href="#i-pin"></use></svg></span><span class="brand-name">Opti<span>Fit</span></span></div>
-<div class="nav-items" id="navItems"><button class="nav-item active" data-view="dashboard" type="button"><svg aria-hidden="true" class="icon"><use href="#i-grid"></use></svg> لوحة الإدارة</button><button class="nav-item" data-view="review" type="button"><svg aria-hidden="true" class="icon"><use href="#i-clock"></use></svg> طابور المراجعة</button><button class="nav-item" data-view="gyms" type="button"><svg aria-hidden="true" class="icon"><use href="#i-dumbbell2"></use></svg> إدارة الصالات</button><button class="nav-item" data-view="users" type="button"><svg aria-hidden="true" class="icon"><use href="#i-users"></use></svg> المستخدمين</button><button class="nav-item" data-view="reports" type="button"><svg aria-hidden="true" class="icon"><use href="#i-alert"></use></svg> البلاغات</button><button class="nav-item" data-view="audit" type="button"><svg aria-hidden="true" class="icon"><use href="#i-file"></use></svg> سجل التدقيق</button><button class="nav-item" data-view="ai" type="button"><svg aria-hidden="true" class="icon"><use href="#i-spark"></use></svg> المساعد الذكي</button></div>
-<button class="primary permission-btn" data-action="permissions" type="button"><svg class="icon"><use href="#i-shield"></use></svg> صلاحيات النظام</button>
-</nav><main aria-live="polite" class="main" id="main"><div class="hero"><div class="hero-title"><span class="hero-icon"><svg aria-hidden="true" class="icon"><use href="#i-grid"></use></svg></span><div><h1>لوحة إدارة OptiFit</h1><p class="subtitle">نظرة عامة على أداء المنصة والطلبات والحالات المسجلة.</p></div></div></div><div class="stats"><article class="stat"><div class="stat-head">إجمالي الصالات<svg aria-hidden="true" class="icon"><use href="#i-dumbbell2"></use></svg></div><div class="stat-value">٦</div><div class="stat-hint">الطلبات المسجلة</div></article><article class="stat"><div class="stat-head">قيد المراجعة<svg aria-hidden="true" class="icon"><use href="#i-clock"></use></svg></div><div class="stat-value">٣</div><div class="stat-hint">بانتظار فحص الإدارة</div></article><article class="stat"><div class="stat-head">الصالات المعتمدة<svg aria-hidden="true" class="icon"><use href="#i-checkcircle"></use></svg></div><div class="stat-value">٢</div><div class="stat-hint">متاحة للنشر</div></article><article class="stat"><div class="stat-head">تعديلات مطلوبة<svg aria-hidden="true" class="icon"><use href="#i-pencil"></use></svg></div><div class="stat-value">١</div><div class="stat-hint">بانتظار تعديل البيانات</div></article></div><div class="layout-two"><section class="panel"><div class="panel-head"><h2 class="panel-title">آخر الأنشطة</h2><button class="small-button" data-view="audit" type="button">عرض السجل <svg aria-hidden="true" class="icon"><use href="#i-arrow"></use></svg></button></div><div class="activity"><div class="activity-item"><span class="activity-dot"></span><div><div>فتح لوحة إدارة OptiFit التجريبية</div><div class="activity-date">٠٢‏/١١‏/٢٠٢٦، ٩:٠٠ ص</div></div></div></div></section><section class="panel"><div class="panel-head"><h2 class="panel-title">الوصول السريع</h2><span class="badge-mini">اختصارات الإدارة</span></div><div class="quick-actions"><button class="quick-link" data-view="review"><svg aria-hidden="true" class="icon"><use href="#i-clock"></use></svg>طابور مراجعة الصالات<svg aria-hidden="true" class="icon"><use href="#i-arrow"></use></svg></button><button class="quick-link" data-view="gyms"><svg aria-hidden="true" class="icon"><use href="#i-dumbbell2"></use></svg>إدارة الصالات<svg aria-hidden="true" class="icon"><use href="#i-arrow"></use></svg></button><button class="quick-link" data-view="users"><svg aria-hidden="true" class="icon"><use href="#i-users"></use></svg>عرض المستخدمين<svg aria-hidden="true" class="icon"><use href="#i-arrow"></use></svg></button><button class="quick-link" data-view="reports"><svg aria-hidden="true" class="icon"><use href="#i-alert"></use></svg>البلاغات<svg aria-hidden="true" class="icon"><use href="#i-arrow"></use></svg></button></div></section></div><p class="section-note">كل الأرقام في هذه النسخة هي أمثلة وليست بيانات مباشرة من قاعدة البيانات.</p></main>
-<div class="footer">OptiFit — نموذج واجهة تفاعلية. البيانات والإجراءات محفوظة محليًا في هذا المتصفح فقط؛ غير متصلة بسيرفر Laravel.</div>
-<div class="modal-backdrop" id="backdrop" role="presentation"><section aria-labelledby="modalTitle" aria-modal="true" class="modal" role="dialog"><div class="modal-header"><h2 id="modalTitle">تفاصيل</h2><button aria-label="إغلاق" class="close-btn" data-action="close" type="button"><svg class="icon"><use href="#i-close"></use></svg></button></div><div class="modal-content" id="modalContent"></div></section></div>
-<div class="toast" id="toast" role="status"><svg class="icon"><use href="#i-checkcircle"></use></svg><span id="toastText"></span></div>
-<script defer="" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-@include('optifit._session_bridge')
-<script defer="" src="{{ asset('optifit/js/app.js') }}"></script></body>
-</html>
+@php
+    $gyms = collect($live['gyms']);
+    $users = collect($live['users']);
+    $statusLabels = ['pending'=>'قيد المراجعة','approved'=>'معتمد','rejected'=>'مرفوض'];
+    $roleLabels = ['user'=>'مستخدم','gym_owner'=>'صاحب نادٍ','admin'=>'مدير'];
+    $adminInitial = mb_strtoupper(mb_substr(trim($live['user']['name']), 0, 1));
+@endphp
+<!DOCTYPE html><html lang="ar" dir="rtl" data-apx-theme="volt"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0d120f"><script src="{{ asset('optifit-apex-assets/js/apex-theme.js') }}"></script><title>لوحة الإدارة | OptiFit APEX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="{{ asset('optifit-apex-assets/css/apex-shared.css') }}" rel="stylesheet"><link href="{{ asset('optifit-apex-assets/css/apex-role-dashboard.css') }}" rel="stylesheet"></head>
+<body class="apx-role-page">@include('optifit_apex.partials.icons')<a class="apx-skip" href="#role-content">انتقل إلى محتوى الإدارة</a>
+<div class="apx-role-layout"><aside class="apx-role-sidebar"><a class="apx-brand" href="{{ route('dashboard') }}"><span class="apx-brand-mark"><svg><use href="#apx-shield"/></svg></span><span>OPTI<span>FIT</span> <small>ADMIN</small></span></a>
+<nav class="apx-role-nav" aria-label="تنقل الإدارة"><a class="is-active" href="#overview" aria-current="page"><svg><use href="#apx-home"/></svg>نظرة عامة</a><a href="{{ route('admin.gyms.index') }}"><svg><use href="#apx-clock"/></svg>مراجعة النوادي</a><a href="#users"><svg><use href="#apx-users"/></svg>المستخدمون</a></nav>
+<div class="apx-role-sidebar-footer"><div class="apx-role-profile"><span class="apx-role-avatar">{{ $adminInitial }}</span><div><strong>{{ $live['user']['name'] }}</strong><small>{{ $live['user']['email'] }}</small></div></div><form method="POST" action="{{ route('logout') }}">@csrf<button class="apx-secondary apx-role-logout" type="submit"><svg><use href="#apx-logout"/></svg>تسجيل الخروج</button></form></div></aside>
+<div class="apx-role-main"><header class="apx-role-topbar"><a class="apx-brand apx-mobile-brand" href="{{ route('dashboard') }}"><span class="apx-brand-mark"><svg><use href="#apx-shield"/></svg></span><span>OPTI<span>FIT</span></span></a><div class="apx-role-topbar-title"><small>مساحة الإدارة</small><strong>قراءة حالة المنصة</strong></div><div class="apx-role-actions"><button class="apx-secondary" type="button" data-apx-theme-open><svg><use href="#apx-palette"/></svg>المظهر</button><form method="POST" action="{{ route('logout') }}">@csrf<button class="apx-icon-button" type="submit" aria-label="تسجيل الخروج"><svg><use href="#apx-logout"/></svg></button></form></div></header>
+<main id="role-content" class="apx-role-content"><section id="overview" class="apx-role-hero"><div><span class="apx-eyebrow">ADMIN CONTROL</span><h1>المنصة، بوضوح.</h1><p>إجمالي المستخدمين والنوادي وحالات المراجعة محسوبة مباشرة من قاعدة البيانات مع الحفاظ على صلاحيات الدور الحالية.</p></div><a class="apx-secondary" href="{{ route('admin.gyms.index') }}"><svg><use href="#apx-shield"/></svg>مراجعة الطلبات</a></section>
+<section class="apx-stats" aria-label="إحصاءات المنصة"><article class="apx-stat"><div class="apx-stat-head">المستخدمون<span><svg><use href="#apx-users"/></svg></span></div><div class="apx-stat-value">{{ $live['adminStats']['users'] ?? $users->count() }}</div><div class="apx-stat-hint">كل الحسابات الحالية</div></article><article class="apx-stat"><div class="apx-stat-head">النوادي<span><svg><use href="#apx-building"/></svg></span></div><div class="apx-stat-value">{{ $gyms->count() }}</div><div class="apx-stat-hint">كل طلبات النوادي</div></article><article class="apx-stat"><div class="apx-stat-head">قيد المراجعة<span><svg><use href="#apx-clock"/></svg></span></div><div class="apx-stat-value">{{ $gyms->where('status','pending')->count() }}</div><div class="apx-stat-hint">تحتاج قرارًا إداريًا</div></article><article class="apx-stat"><div class="apx-stat-head">التقييمات<span><svg><use href="#apx-star"/></svg></span></div><div class="apx-stat-value">{{ $live['adminStats']['reviews'] ?? 0 }}</div><div class="apx-stat-hint">{{ $live['adminStats']['audit_logs'] ?? 0 }} إجراء إداري موثق</div></article></section>
+<section id="review" class="apx-panel"><header class="apx-panel-head"><div><h2>طلبات النوادي</h2><p>حالة كل نادٍ كما هي مخزنة في MySQL.</p></div><span class="apx-live-pill">{{ $gyms->where('status','pending')->count() }} بانتظار المراجعة</span></header><div class="apx-table-wrap"><table class="apx-table"><thead><tr><th>النادي</th><th>المالك</th><th>الموقع</th><th>اكتمال البيانات</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody>
+@forelse($gyms as $gym)<tr><td><strong>{{ $gym['name'] }}</strong><small>#{{ $gym['id'] }}</small></td><td>{{ $gym['owner'] }}</td><td>{{ $gym['area'] ?: '—' }}</td><td>{{ $gym['complete'] }}%</td><td><span class="apx-status-badge {{ $gym['status'] }}">{{ $statusLabels[$gym['status']] ?? $gym['status'] }}</span></td><td><a class="apx-secondary" href="{{ route('admin.gyms.show', $gym['id']) }}">مراجعة</a></td></tr>@empty<tr><td colspan="6"><div class="apx-empty-state">لا توجد نوادٍ مسجلة.</div></td></tr>@endforelse
+</tbody></table></div></section>
+<section id="users" class="apx-panel"><header class="apx-panel-head"><div><h2>المستخدمون</h2><p>الحسابات والأدوار المرتبطة بها.</p></div><span class="apx-live-pill">{{ $users->count() }} حساب</span></header><div class="apx-table-wrap"><table class="apx-table"><thead><tr><th>الاسم</th><th>البريد الإلكتروني</th><th>الدور</th><th>الحالة</th></tr></thead><tbody>
+@forelse($users as $account)<tr><td><strong>{{ $account['name'] }}</strong></td><td dir="ltr">{{ $account['email'] }}</td><td>{{ $roleLabels[$account['role']] ?? $account['role'] }}</td><td><span class="apx-status-badge approved">نشط</span></td></tr>@empty<tr><td colspan="4"><div class="apx-empty-state">لا توجد حسابات متاحة للعرض.</div></td></tr>@endforelse
+</tbody></table></div></section>
+<section class="apx-note"><strong>صلاحيات حقيقية:</strong> مراجعة النادي وتغيير حالته متاحان فقط لدور Admin، وكل قرار يُحفظ في سجل التدقيق. لم يتم إنشاء حساب Admin أو تغيير صلاحية أي مستخدم.</section>
+</main></div></div>@include('optifit_apex.partials.theme-studio')<script defer src="{{ asset('optifit-apex-assets/js/apex-shared.js') }}"></script></body></html>

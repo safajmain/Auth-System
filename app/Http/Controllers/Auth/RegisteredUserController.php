@@ -40,8 +40,11 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => 1,
         ]);
+
+        // role_id is intentionally not mass assignable on the User model.
+        $user->role_id = 1;
+        $user->save();
 
         event(new Registered($user));
 

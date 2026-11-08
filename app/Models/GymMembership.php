@@ -27,4 +27,9 @@ class GymMembership extends Model
             'gym_id'
         );
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'membership_id';
+    }
 }

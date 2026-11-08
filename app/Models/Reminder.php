@@ -47,4 +47,9 @@ class Reminder extends Model
             'notification_id'
         );
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'notification_id';
+    }
 }

@@ -22,4 +22,9 @@ class GymImage extends Model
     {
         return $this->belongsTo(Gym::class, 'gym_id', 'gym_id');
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'image_id';
+    }
 }

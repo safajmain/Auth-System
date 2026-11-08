@@ -1,65 +1,201 @@
 <!DOCTYPE html>
-
-
-<html data-role="user" data-static-pages="1" data-view="dashboard" dir="rtl" lang="ar">
+<html lang="ar" dir="rtl" data-theme="volt">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<meta content="#0b1219" name="theme-color"/>
-<title>الرئيسية | OptiFit</title>
-<link href="{{ asset('optifit/css/user/dashboard.css') }}" rel="stylesheet"/>
-<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
-  <meta name="csrf-token" content="{{ csrf_token() }}"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0d120f">
+    <script src="{{ asset('optifit-apex-assets/js/apex-theme.js') }}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>لوحة المستخدم | OptiFit APEX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="{{ asset('optifit-apex-assets/css/user-dashboard.css') }}" rel="stylesheet">
 </head>
 <body>
-<!-- All SVG icons are embedded locally. No external JavaScript or build tools required. -->
-<svg aria-hidden="true" style="display:none" xmlns="http://www.w3.org/2000/svg">
-<symbol id="i-grid" viewbox="0 0 24 24"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></symbol>
-<symbol id="i-shield" viewbox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"></path><path d="m9 12 2 2 4-4"></path></symbol>
-<symbol id="i-users" viewbox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></symbol>
-<symbol id="i-building" viewbox="0 0 24 24"><rect height="15" rx="2" width="18" x="3" y="6"></rect><path d="M8 21V3h8v18M7 10h2m-2 4h2m6-4h2m-2 4h2"></path></symbol>
-<symbol id="i-list" viewbox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></symbol>
-<symbol id="i-dumbbell" viewbox="0 0 24 24"><path d="m6.5 6.5 11 11M2.5 9 9 2.5M15 21.5 21.5 15M4.5 12l8-8M12 19.5l8-8"></path></symbol>
-<symbol id="i-dumbbell2" viewbox="0 0 24 24"><path d="M6 6v12M3 9v6m15-9v12m3-9v6M6 12h12"></path></symbol>
-<symbol id="i-check" viewbox="0 0 24 24"><path d="m20 6-11 11-5-5"></path></symbol>
-<symbol id="i-checkcircle" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></symbol>
-<symbol id="i-clock" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></symbol>
-<symbol id="i-settings" viewbox="0 0 24 24"><path d="M4 7h16M4 17h16"></path><circle cx="9" cy="7" fill="#14212a" r="2"></circle><circle cx="15" cy="17" fill="#14212a" r="2"></circle></symbol>
-<symbol id="i-calendar" viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="5"></rect><path d="M7 3v4m10-4v4M3 10h18"></path></symbol>
-<symbol id="i-pin" viewbox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></symbol>
-<symbol id="i-search" viewbox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></symbol>
-<symbol id="i-download" viewbox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"></path></symbol>
-<symbol id="i-close" viewbox="0 0 24 24"><path d="M5 5 19 19M19 5 5 19"></path></symbol>
-<symbol id="i-pencil" viewbox="0 0 24 24"><path d="m15 5 4 4M4 20l5-.9L20 8a3 3 0 0 0-4-4L5 15l-1 5Z"></path></symbol>
-<symbol id="i-alert" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6m0 4h.01"></path></symbol>
-<symbol id="i-file" viewbox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path><path d="M14 2v6h6M8 13h8M8 17h8"></path></symbol>
-<symbol id="i-plus" viewbox="0 0 24 24"><path d="M12 4v16M4 12h16"></path></symbol>
-<symbol id="i-arrow" viewbox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"></path></symbol>
-<symbol id="i-spark" viewbox="0 0 24 24"><path d="m12 3 1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8Z"></path></symbol>
-<symbol id="i-eye" viewbox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></symbol>
-<symbol id="i-rotate" viewbox="0 0 24 24"><path d="M3 11a9 9 0 1 1 2 7M3 4v7h7"></path></symbol>
-</svg>
-<header class="topbar">
-<div class="top-start">
-<div class="experience"><span class="dot"></span> تجربة المنصة التفاعلية <span class="demo-label">نسخة تجريبية</span></div>
-<span class="top-divider"></span>
-<div aria-label="تبديل الواجهة التجريبية" class="role-switch" role="group">
-<button aria-pressed="true" class="role active" data-role="user" type="button"><svg class="icon"><use href="#i-users"></use></svg> مستخدم</button>
-<button aria-pressed="false" class="role" data-role="owner" type="button" disabled="disabled" title="هذه الواجهة مخصصة لدور آخر"><svg class="icon"><use href="#i-building"></use></svg> صاحب جيم</button>
-<button aria-pressed="false" class="role" data-role="admin" type="button" disabled="disabled" title="هذه الواجهة مخصصة لدور آخر"><svg class="icon"><use href="#i-shield"></use></svg> مدير النظام</button>
-</div>
-</div>
-<button class="catalog" data-action="catalog" type="button"><svg class="icon"><use href="#i-grid"></use></svg> فهرس الشاشات</button>
-</header>
-<nav aria-label="التنقل الرئيسي" class="navbar">
-<div class="brand"><span class="logo-mark"><svg class="icon"><use href="#i-pin"></use></svg></span><span class="brand-name">Opti<span>Fit</span></span></div>
-<div class="nav-items" id="navItems"><button class="nav-item" data-view="personal" type="button"><svg aria-hidden="true" class="icon"><use href="#i-users"></use></svg> المعلومات الشخصية</button><button class="nav-item" data-view="activities" type="button"><svg aria-hidden="true" class="icon"><use href="#i-dumbbell2"></use></svg> الأنشطة المفضلة</button><button class="nav-item" data-view="facilities" type="button"><svg aria-hidden="true" class="icon"><use href="#i-checkcircle"></use></svg> المرافق المفضلة</button><button class="nav-item" data-view="times" type="button"><svg aria-hidden="true" class="icon"><use href="#i-clock"></use></svg> الأوقات المتاحة</button><button class="nav-item active" data-view="dashboard" type="button"><svg aria-hidden="true" class="icon"><use href="#i-grid"></use></svg> الرئيسية</button><button class="nav-item" data-view="find" type="button"><svg aria-hidden="true" class="icon"><use href="#i-search"></use></svg> بحث النوادي</button><button class="nav-item" data-view="results" type="button"><svg aria-hidden="true" class="icon"><use href="#i-list"></use></svg> نتائج البحث</button><button class="nav-item" data-view="details" type="button"><svg aria-hidden="true" class="icon"><use href="#i-eye"></use></svg> تفاصيل النادي</button><button class="nav-item" data-view="compare" type="button"><svg aria-hidden="true" class="icon"><use href="#i-settings"></use></svg> مقارنة النوادي</button><button class="nav-item" data-view="map" type="button"><svg aria-hidden="true" class="icon"><use href="#i-pin"></use></svg> الخريطة</button><button class="nav-item" data-view="favorites" type="button"><svg aria-hidden="true" class="icon"><use href="#i-checkcircle"></use></svg> المفضلة</button><button class="nav-item" data-view="myreviews" type="button"><svg aria-hidden="true" class="icon"><use href="#i-file"></use></svg> تقييماتي</button><button class="nav-item" data-view="ai" type="button"><svg aria-hidden="true" class="icon"><use href="#i-spark"></use></svg> المساعد الذكي</button><button class="nav-item" data-view="notifications" type="button"><svg aria-hidden="true" class="icon"><use href="#i-alert"></use></svg> الإشعارات</button><button class="nav-item" data-view="profile" type="button"><svg aria-hidden="true" class="icon"><use href="#i-users"></use></svg> حسابي</button><button class="nav-item" data-view="notifsettings" type="button"><svg aria-hidden="true" class="icon"><use href="#i-settings"></use></svg> إعدادات الإشعارات</button></div>
-<button class="primary permission-btn" data-action="permissions" type="button"><svg class="icon"><use href="#i-shield"></use></svg> صلاحيات النظام</button>
-</nav><main aria-live="polite" class="main" id="main"><div class="hero"><div class="hero-title"><span class="hero-icon"><svg aria-hidden="true" class="icon"><use href="#i-grid"></use></svg></span><div><h1>لوحة المستخدم</h1><p class="subtitle">نوادي مناسبة حسب تفضيلاتك واختصارات خدمات المنصة.</p></div></div></div><div class="stats"><article class="stat"><div class="stat-head">نوادٍ معتمدة<svg aria-hidden="true" class="icon"><use href="#i-dumbbell2"></use></svg></div><div class="stat-value">2</div></article><article class="stat"><div class="stat-head">المفضلة<svg aria-hidden="true" class="icon"><use href="#i-checkcircle"></use></svg></div><div class="stat-value">0</div></article><article class="stat"><div class="stat-head">أوقات التمرين<svg aria-hidden="true" class="icon"><use href="#i-clock"></use></svg></div><div class="stat-value">0</div></article><article class="stat"><div class="stat-head">تقييماتي<svg aria-hidden="true" class="icon"><use href="#i-file"></use></svg></div><div class="stat-value">0</div></article></div><section class="panel app-panel"><div class="panel-head"><h2 class="panel-title">مرحبًا بك</h2></div><div class="app-inline-actions"><button class="small-button" data-go="personal"><svg aria-hidden="true" class="icon"><use href="#i-users"></use></svg> تعديل تفضيلاتي</button><button class="small-button" data-go="find"><svg aria-hidden="true" class="icon"><use href="#i-search"></use></svg> البحث</button><button class="small-button" data-go="favorites"><svg aria-hidden="true" class="icon"><use href="#i-checkcircle"></use></svg> المفضلة</button><button class="small-button" data-go="ai"><svg aria-hidden="true" class="icon"><use href="#i-spark"></use></svg> المساعد الذكي</button></div><p class="app-muted">لم تحدد منطقة بعد · لم تحدد الميزانية بعد</p></section><section class="panel app-panel"><div class="panel-head"><h2 class="panel-title">نوادٍ مقترحة وقريبة حسب البيانات المتاحة</h2></div><div class="app-grid"><article class="app-card"><div class="app-row"><div class="gym-cell"><span class="gym-badge"><svg aria-hidden="true" class="icon"><use href="#i-dumbbell2"></use></svg></span><span><div class="gym-name">Peak Fitness Center</div></span></div><span class="app-chip">بدون تقييم</span></div><div class="card-meta"><svg aria-hidden="true" class="icon"><use href="#i-pin"></use></svg> عمّان – طبربور<div>الاشتراك الشهري: 50 د.أ</div><div>سبب الاقتراح: يمكنك مقارنة السعر والموقع والمرافق</div></div><div class="card-actions"><button class="small-button" data-app="gym-detail" data-id="105"><svg aria-hidden="true" class="icon"><use href="#i-eye"></use></svg> التفاصيل</button><button class="small-button" data-app="favorite" data-id="105"><svg aria-hidden="true" class="icon"><use href="#i-checkcircle"></use></svg> أضف للمفضلة</button><button class="small-button" data-app="compare" data-id="105"><svg aria-hidden="true" class="icon"><use href="#i-settings"></use></svg> مقارنة</button></div></article><article class="app-card"><div class="app-row"><div class="gym-cell"><span class="gym-badge"><svg aria-hidden="true" class="icon"><use href="#i-dumbbell2"></use></svg></span><span><div class="gym-name">Elite Fitness</div></span></div><span class="app-chip">بدون تقييم</span></div><div class="card-meta"><svg aria-hidden="true" class="icon"><use href="#i-pin"></use></svg> عمّان – تلاع العلي<div>الاشتراك الشهري: 40 د.أ</div><div>سبب الاقتراح: يمكنك مقارنة السعر والموقع والمرافق</div></div><div class="card-actions"><button class="small-button" data-app="gym-detail" data-id="106"><svg aria-hidden="true" class="icon"><use href="#i-eye"></use></svg> التفاصيل</button><button class="small-button" data-app="favorite" data-id="106"><svg aria-hidden="true" class="icon"><use href="#i-checkcircle"></use></svg> أضف للمفضلة</button><button class="small-button" data-app="compare" data-id="106"><svg aria-hidden="true" class="icon"><use href="#i-settings"></use></svg> مقارنة</button></div></article></div></section></main>
-<div class="footer">OptiFit — نموذج واجهة تفاعلية. البيانات والإجراءات محفوظة محليًا في هذا المتصفح فقط؛ غير متصلة بسيرفر Laravel.</div>
-<div class="modal-backdrop" id="backdrop" role="presentation"><section aria-labelledby="modalTitle" aria-modal="true" class="modal" role="dialog"><div class="modal-header"><h2 id="modalTitle">تفاصيل</h2><button aria-label="إغلاق" class="close-btn" data-action="close" type="button"><svg class="icon"><use href="#i-close"></use></svg></button></div><div class="modal-content" id="modalContent"></div></section></div>
-<div class="toast" id="toast" role="status"><svg class="icon"><use href="#i-checkcircle"></use></svg><span id="toastText"></span></div>
-<script defer="" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-@include('optifit._session_bridge')
-<script defer="" src="{{ asset('optifit/js/app.js') }}"></script></body>
+    <a class="skip-link" href="#dashboard-main">انتقل إلى المحتوى الرئيسي</a>
+
+    <svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="ap-dumbbell" viewBox="0 0 24 24"><path d="M6 6v12M3 9v6m15-9v12m3-9v6M6 12h12"/></symbol>
+        <symbol id="ap-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></symbol>
+        <symbol id="ap-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+        <symbol id="ap-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+        <symbol id="ap-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+        <symbol id="ap-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+        <symbol id="ap-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></symbol>
+        <symbol id="ap-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"/></symbol>
+        <symbol id="ap-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z"/><path d="M9 3v15M15 6v15"/></symbol>
+        <symbol id="ap-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+        <symbol id="ap-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18h1.5a2 2 0 0 0 0-4H12a1.5 1.5 0 0 1 0-3h3a6 6 0 0 0 0-12Z"/><circle cx="7.5" cy="10.5" r=".8"/><circle cx="10" cy="7" r=".8"/><circle cx="14" cy="6.5" r=".8"/></symbol>
+        <symbol id="ap-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+        <symbol id="ap-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+        <symbol id="ap-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+        <symbol id="ap-arrow" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"/></symbol>
+        <symbol id="ap-logout" viewBox="0 0 24 24"><path d="M10 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2M15 17l5-5-5-5M20 12H8"/></symbol>
+    </svg>
+    @include('optifit_apex.partials.icons')
+
+    <div class="dashboard-shell" data-dashboard-shell>
+        <button class="mobile-shade" type="button" data-sidebar-close aria-label="إغلاق القائمة"></button>
+
+        @include('optifit_apex.partials.user-sidebar')
+
+        <main class="dashboard-main" id="dashboard-main" tabindex="-1">
+            <header class="dashboard-topbar">
+                <div class="topbar-welcome">
+                    <button class="icon-button menu-button" type="button" data-sidebar-open aria-label="فتح القائمة" aria-controls="dashboard-sidebar" aria-expanded="false"><svg><use href="#ap-menu"/></svg></button>
+                    <div><span class="eyebrow">OPTIFIT / YOUR SPACE</span><h1>أهلًا، {{ $dashboard['user']['name'] }}.</h1></div>
+                </div>
+                <div class="topbar-actions">
+                    <button class="icon-button theme-button" type="button" data-theme-open aria-label="فتح إعدادات المظهر"><svg><use href="#ap-palette"/></svg></button>
+                    <a class="user-avatar" href="{{ route('profile.edit') }}" aria-label="فتح إعدادات حساب {{ $dashboard['user']['name'] }}">{{ $dashboard['user']['initial'] ?: 'O' }}</a>
+                </div>
+            </header>
+
+            @if (session('success'))
+                <div class="status-message" role="status"><svg><use href="#ap-check"/></svg><span>{{ session('success') }}</span></div>
+            @endif
+
+            <section class="dashboard-hero" aria-labelledby="hero-title">
+                <svg class="hero-watermark" aria-hidden="true"><use href="#ap-dumbbell"/></svg>
+                <div class="hero-copy">
+                    <span class="eyebrow">DISCOVER. TRAIN. EVOLVE.</span>
+                    <h2 id="hero-title">هدفك أكبر من<br><em>مجرد اشتراك.</em></h2>
+                    <p>بياناتك الرياضية محفوظة في حسابك، والنوادي أدناه قادمة مباشرة من OptiFit حسب التفضيلات المتاحة.</p>
+                    <div class="hero-actions">
+                        <a class="primary-button" href="{{ route('gyms.index') }}">استكشف كل النوادي <svg><use href="#ap-arrow"/></svg></a>
+                        <a class="secondary-button" href="{{ route('user.personal') }}">حدّث تفضيلاتك</a>
+                    </div>
+                </div>
+                <div class="hero-profile" aria-label="ملخص ملفك الرياضي">
+                    <span>ملفك الرياضي</span>
+                    <strong>{{ $dashboard['preference']['location'] ?: 'لم تُحدد المنطقة' }}</strong>
+                    <small>
+                        @if ($dashboard['preference']['budget'] !== null)
+                            ميزانية حتى {{ number_format($dashboard['preference']['budget'], 0) }} د.أ شهريًا
+                        @else
+                            لم تُحدد الميزانية
+                        @endif
+                    </small>
+                </div>
+            </section>
+
+            <section class="metrics-grid" aria-label="إحصاءات الحساب">
+                <article class="metric-card"><svg><use href="#ap-dumbbell"/></svg><strong>{{ $dashboard['stats']['approved_gyms'] }}</strong><span>نوادٍ معتمدة</span></article>
+                <article class="metric-card"><svg><use href="#ap-heart"/></svg><strong>{{ $dashboard['stats']['favorites'] }}</strong><span>في المفضلة</span></article>
+                <article class="metric-card"><svg><use href="#ap-clock"/></svg><strong>{{ $dashboard['stats']['times'] }}</strong><span>أوقات تدريب</span></article>
+                <article class="metric-card"><svg><use href="#ap-star"/></svg><strong>{{ $dashboard['stats']['reviews'] }}</strong><span>تقييماتك</span></article>
+            </section>
+
+            <section class="profile-grid" aria-labelledby="profile-summary-title">
+                <article class="profile-panel profile-panel-main">
+                    <div class="section-heading">
+                        <div><span class="eyebrow">YOUR FITNESS PROFILE</span><h2 id="profile-summary-title">تفضيلاتك <em>الحقيقية.</em></h2></div>
+                        <a class="text-link" href="{{ route('user.personal') }}">تعديل الملف <svg><use href="#ap-arrow"/></svg></a>
+                    </div>
+                    <div class="preference-columns">
+                        <div>
+                            <h3>الأنشطة</h3>
+                            <div class="chip-list">
+                                @forelse ($dashboard['activities'] as $activity)<span class="data-chip">{{ $activity }}</span>@empty<span class="empty-inline">لا توجد أنشطة محفوظة.</span>@endforelse
+                            </div>
+                        </div>
+                        <div>
+                            <h3>المرافق</h3>
+                            <div class="chip-list">
+                                @forelse ($dashboard['facilities'] as $facility)<span class="data-chip">{{ $facility }}</span>@empty<span class="empty-inline">لا توجد مرافق محفوظة.</span>@endforelse
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="profile-panel schedule-panel">
+                    <div class="schedule-title"><span class="schedule-icon"><svg><use href="#ap-clock"/></svg></span><div><span class="eyebrow">TRAINING SCHEDULE</span><h2>أوقاتك المتاحة</h2></div></div>
+                    <div class="schedule-list">
+                        @forelse ($dashboard['times'] as $time)
+                            <div class="schedule-row"><strong>{{ $time['day'] }}</strong><span dir="ltr">{{ $time['start'] }} — {{ $time['end'] }}</span></div>
+                        @empty
+                            <p class="empty-inline">لا توجد أوقات محفوظة.</p>
+                        @endforelse
+                    </div>
+                    <a class="secondary-button full-width" href="{{ route('user.times') }}">إدارة الأوقات</a>
+                </article>
+            </section>
+
+            <section class="gyms-section" id="recommended-gyms" aria-labelledby="gyms-title">
+                <div class="section-heading gyms-heading">
+                    <div><span class="eyebrow">CURATED FROM MYSQL</span><h2 id="gyms-title">نوادٍ على <em>مقاسك.</em></h2><p>مرتبة بعدد نقاط الالتقاء الفعلية بين بيانات النادي وتفضيلات حسابك.</p></div>
+                    <span class="results-count">{{ count($dashboard['gyms']) }} نتيجة</span>
+                </div>
+
+                <div class="gym-grid">
+                    @forelse ($dashboard['gyms'] as $gym)
+                        <article class="gym-card">
+                            <div class="gym-media">
+                                @if ($gym['image'])
+                                    <img src="{{ $gym['image'] }}" alt="صورة {{ $gym['name'] }}" width="640" height="400" loading="lazy">
+                                @else
+                                    <div class="gym-placeholder" role="img" aria-label="لا توجد صورة محفوظة لنادي {{ $gym['name'] }}"><svg><use href="#ap-dumbbell"/></svg></div>
+                                @endif
+                                <span class="match-badge">{{ $gym['match_count'] }} نقاط توافق</span>
+                                @if ($gym['favorite'])<span class="favorite-badge"><svg><use href="#ap-heart"/></svg> محفوظ</span>@endif
+                            </div>
+                            <div class="gym-content">
+                                <span class="gym-location"><svg><use href="#ap-pin"/></svg>{{ collect([$gym['city'], $gym['area']])->filter()->join('، ') ?: 'الموقع غير محدد' }}</span>
+                                <h3>{{ $gym['name'] }}</h3>
+                                <p>{{ $gym['description'] ?: 'لا يوجد وصف مضاف لهذا النادي بعد.' }}</p>
+                                <div class="gym-match-list" aria-label="أسباب التوافق">
+                                    @foreach (array_slice($gym['matches']['activities'], 0, 2) as $match)<span><svg><use href="#ap-check"/></svg>{{ $match }}</span>@endforeach
+                                    @foreach (array_slice($gym['matches']['facilities'], 0, 2) as $match)<span><svg><use href="#ap-check"/></svg>{{ $match }}</span>@endforeach
+                                    @if ($gym['matches']['location'])<span><svg><use href="#ap-map"/></svg>ضمن منطقتك</span>@endif
+                                    @if ($gym['matches']['budget'])<span><svg><use href="#ap-check"/></svg>ضمن الميزانية</span>@endif
+                                </div>
+                                <div class="gym-footer">
+                                    <div>
+                                        @if ($gym['price'] !== null)<strong>{{ number_format($gym['price'], 0) }} د.أ</strong><small>/ شهر</small>@else<strong class="price-unavailable">السعر غير محدد</strong>@endif
+                                    </div>
+                                    <a class="details-button" href="{{ route('gyms.show', $gym['id']) }}">التفاصيل والتقييم <svg><use href="#ap-arrow"/></svg></a>
+                                </div>
+                            </div>
+                        </article>
+                    @empty
+                        <div class="empty-state"><span><svg><use href="#ap-dumbbell"/></svg></span><h3>لا توجد نوادٍ معتمدة حاليًا</h3><p>ستظهر هنا النوادي المعتمدة من قاعدة البيانات فور توفرها.</p></div>
+                    @endforelse
+                </div>
+            </section>
+
+            <footer class="dashboard-footer"><span>OptiFit APEX</span><p>كل الأرقام والنوادي والتفضيلات المعروضة مقروءة من Laravel وMySQL.</p></footer>
+        </main>
+    </div>
+
+    @foreach ($dashboard['gyms'] as $gym)
+        <dialog class="gym-dialog" id="gym-dialog-{{ $gym['id'] }}" aria-labelledby="gym-dialog-title-{{ $gym['id'] }}">
+            <div class="dialog-head">
+                <div><span class="eyebrow">GYM DETAILS</span><h2 id="gym-dialog-title-{{ $gym['id'] }}">{{ $gym['name'] }}</h2></div>
+                <button class="dialog-close" type="button" data-dialog-close aria-label="إغلاق تفاصيل {{ $gym['name'] }}"><svg><use href="#ap-close"/></svg></button>
+            </div>
+            <div class="dialog-body">
+                <p>{{ $gym['description'] ?: 'لا يوجد وصف مضاف لهذا النادي بعد.' }}</p>
+                <dl class="details-list">
+                    <div><dt>الموقع</dt><dd>{{ collect([$gym['city'], $gym['area'], $gym['address']])->filter()->join('، ') ?: 'غير محدد' }}</dd></div>
+                    <div><dt>الهاتف</dt><dd>{{ $gym['phone'] ?: 'غير محدد' }}</dd></div>
+                    <div><dt>الاشتراك الشهري</dt><dd>{{ $gym['price'] !== null ? number_format($gym['price'], 0).' د.أ' : 'غير محدد' }}</dd></div>
+                    <div><dt>نقاط التوافق</dt><dd>{{ $gym['match_count'] }}</dd></div>
+                </dl>
+                <div class="dialog-grid">
+                    <section><h3>الأنشطة</h3><div class="chip-list">@forelse ($gym['activities'] as $activity)<span class="data-chip">{{ $activity }}</span>@empty<span class="empty-inline">غير محددة</span>@endforelse</div></section>
+                    <section><h3>المرافق</h3><div class="chip-list">@forelse ($gym['facilities'] as $facility)<span class="data-chip">{{ $facility }}</span>@empty<span class="empty-inline">غير محددة</span>@endforelse</div></section>
+                </div>
+                @if (count($gym['hours']))
+                    <section class="dialog-hours"><h3>ساعات العمل</h3>@foreach ($gym['hours'] as $hour)<span>{{ $hour['day'] }}: <b dir="ltr">{{ substr($hour['open'], 0, 5) }} — {{ substr($hour['close'], 0, 5) }}</b></span>@endforeach</section>
+                @endif
+                @if ($gym['website_url'])<a class="primary-button dialog-link" href="{{ $gym['website_url'] }}" target="_blank" rel="noopener noreferrer">زيارة موقع النادي</a>@endif
+            </div>
+        </dialog>
+    @endforeach
+
+    @include('optifit_apex.partials.user-theme-studio')
+
+    <script defer src="{{ asset('optifit-apex-assets/js/user-dashboard.js') }}"></script>
+</body>
 </html>

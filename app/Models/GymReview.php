@@ -35,4 +35,9 @@ class GymReview extends Model
             'gym_id'
         );
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'review_id';
+    }
 }

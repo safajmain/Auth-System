@@ -27,6 +27,14 @@ class Gym extends Model
         'verification_status',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'latitude' => 'decimal:8',
+            'longitude' => 'decimal:8',
+        ];
+    }
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');
@@ -92,5 +100,10 @@ class Gym extends Model
             'gym_id',
             'gym_id'
         );
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'gym_id';
     }
 }
