@@ -23,6 +23,10 @@ class StoreGymRequest extends FormRequest
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'phone' => ['nullable', 'string', 'max:30'],
             'website_url' => ['nullable', 'url:http,https', 'max:255'],
+
+            'profession_license' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
+            'establishment_certificate' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
+            'commercial_registration' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ];
     }
 
@@ -38,6 +42,10 @@ class StoreGymRequest extends FormRequest
             'longitude' => 'خط الطول',
             'phone' => 'رقم الهاتف',
             'website_url' => 'الموقع الإلكتروني',
+
+            'profession_license' => 'رخصة المهن',
+            'establishment_certificate' => 'شهادة تسجيل المنشأة',
+            'commercial_registration' => 'السجل التجاري',
         ];
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\OwnerGymDetailsController;
 use App\Http\Controllers\ReminderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleAuthController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -44,18 +45,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/user/personal', function () {
 
-    abort_unless(auth()->user()->role_id == 1, 403);
+Route::get('/user/personal', function (\Illuminate\Http\Request $request) {
+    /** @var \App\Models\User $user */
+    $user = $request->user();
 
-    $preference = auth()->user()->preferences()->first();
+    abort_unless((int) $user->role_id === 1, 403);
+
+    $preference = $user->preferences()->first();
 
     return view('optifit.user.personal', compact('preference'));
-
 })->middleware(['auth', 'verified'])->name('user.personal');
 
 Route::post('/user/personal', function (\Illuminate\Http\Request $request) {
-
     abort_unless((int) $request->user()->role_id === 1, 403);
 
     $data = $request->validate([
@@ -79,16 +81,19 @@ Route::post('/user/personal', function (\Illuminate\Http\Request $request) {
         ]
     );
 
-   return redirect()->route('user.activities')
-    ->with('success', 'تم حفظ البيانات بنجاح');
-
+    return redirect()->route('user.activities')
+        ->with('success', 'تم حفظ البيانات بنجاح');
 })->middleware(['auth', 'verified'])
-  ->name('user.personal.store');
+    ->name('user.personal.store');
 
-Route::get('/user/activities', function () {
-    abort_unless((int) auth()->user()->role_id === 1, 403);
 
-    $selectedActivities = auth()->user()->preferredActivities()
+Route::get('/user/activities', function (\Illuminate\Http\Request $request) {
+    /** @var \App\Models\User $user */
+    $user = $request->user();
+
+    abort_unless((int) $user->role_id === 1, 403);
+
+    $selectedActivities = $user->preferredActivities()
         ->pluck('activity_name')
         ->all();
 
@@ -96,7 +101,6 @@ Route::get('/user/activities', function () {
 })->middleware(['auth', 'verified'])->name('user.activities');
 
 Route::post('/user/activities', function (\Illuminate\Http\Request $request) {
-
     abort_unless((int) $request->user()->role_id === 1, 403);
 
     $data = $request->validate([
@@ -128,14 +132,13 @@ Route::post('/user/activities', function (\Illuminate\Http\Request $request) {
     }
 
     \Illuminate\Support\Facades\DB::transaction(function () use ($request, $activityIds) {
-
         $userId = $request->user()->id;
 
         \Illuminate\Support\Facades\DB::table('user_preferred_activities')
             ->where('user_id', $userId)
             ->delete();
 
-        $records = array_map(fn ($id) => [
+        $records = array_map(fn($id) => [
             'user_id' => $userId,
             'activity_id' => $id,
         ], $activityIds);
@@ -145,15 +148,17 @@ Route::post('/user/activities', function (\Illuminate\Http\Request $request) {
     });
 
     return redirect()->route('user.facilities')
-    ->with('success', 'تم حفظ الأنشطة بنجاح');
-
+        ->with('success', 'تم حفظ الأنشطة بنجاح');
 })->middleware(['auth', 'verified'])
-  ->name('user.activities.store');
+    ->name('user.activities.store');
 
-Route::get('/user/facilities', function () {
-    abort_unless((int) auth()->user()->role_id === 1, 403);
+Route::get('/user/facilities', function (\Illuminate\Http\Request $request) {
+    /** @var \App\Models\User $user */
+    $user = $request->user();
 
-    $selectedFacilities = auth()->user()->preferredFacilities()
+    abort_unless((int) $user->role_id === 1, 403);
+
+    $selectedFacilities = $user->preferredFacilities()
         ->pluck('facility_name')
         ->all();
 
@@ -161,7 +166,6 @@ Route::get('/user/facilities', function () {
 })->middleware(['auth', 'verified'])->name('user.facilities');
 
 Route::post('/user/facilities', function (\Illuminate\Http\Request $request) {
-
     abort_unless((int) $request->user()->role_id === 1, 403);
 
     $data = $request->validate([
@@ -195,14 +199,13 @@ Route::post('/user/facilities', function (\Illuminate\Http\Request $request) {
     }
 
     \Illuminate\Support\Facades\DB::transaction(function () use ($request, $facilityIds) {
-
         $userId = $request->user()->id;
 
         \Illuminate\Support\Facades\DB::table('user_preferred_facilities')
             ->where('user_id', $userId)
             ->delete();
 
-        $records = array_map(fn ($id) => [
+        $records = array_map(fn($id) => [
             'user_id' => $userId,
             'facility_id' => $id,
         ], $facilityIds);
@@ -212,41 +215,34 @@ Route::post('/user/facilities', function (\Illuminate\Http\Request $request) {
     });
 
     return redirect()->route('user.times')
-    ->with('success', 'تم حفظ المرافق بنجاح');
-
+        ->with('success', 'تم حفظ المرافق بنجاح');
 })->middleware(['auth', 'verified'])
-  ->name('user.facilities.store');
-// عرض صفحة الأوقات المتاحة
-Route::get('/user/times', function () {
+    ->name('user.facilities.store');
 
-    abort_unless((int) auth()->user()->role_id === 1, 403);
+// عرض صفحة الأوقات المتاحة
+
+Route::get('/user/times', function (\Illuminate\Http\Request $request) {
+    /** @var \App\Models\User $user */
+    $user = $request->user();
+
+    abort_unless((int) $user->role_id === 1, 403);
 
     $times = \Illuminate\Support\Facades\DB::table('user_available_times')
-        ->where('user_id', auth()->id())
+        ->where('user_id', $user->id)
         ->orderBy('available_time_id')
         ->get();
 
     return view('optifit.user.times', compact('times'));
-
 })->middleware(['auth', 'verified'])->name('user.times');
-
 
 // حفظ فترة تدريب جديدة
 Route::post('/user/times', function (\Illuminate\Http\Request $request) {
-
     abort_unless((int) $request->user()->role_id === 1, 403);
 
     $data = $request->validate([
         'day' => [
             'required',
             \Illuminate\Validation\Rule::in([
-                'الأحد',
-                'الاثنين',
-                'الثلاثاء',
-                'الأربعاء',
-                'الخميس',
-                'الجمعة',
-                'السبت',
                 'الأحد',
                 'الاثنين',
                 'الثلاثاء',
@@ -269,8 +265,8 @@ Route::post('/user/times', function (\Illuminate\Http\Request $request) {
 
     return redirect()->route('user.times')
         ->with('success', 'تم حفظ الفترة بنجاح');
-
 })->middleware(['auth', 'verified'])->name('user.times.store');
+
 // حذف فترة تدريب خاصة بالمستخدم
 Route::delete('/user/times/{id}', function (
     \Illuminate\Http\Request $request,
@@ -285,32 +281,41 @@ Route::delete('/user/times/{id}', function (
 
     return redirect()->route('user.times')
         ->with('success', 'تم حذف الفترة بنجاح');
-
 })->middleware(['auth', 'verified'])->name('user.times.destroy');
 
+// Owner routes
 Route::middleware(['auth', 'verified', 'role:2'])
     ->prefix('owner')
     ->name('owner.')
     ->group(function () {
         Route::resource('gyms', OwnerGymController::class);
+
         Route::put('gyms/{gym}/facilities', [OwnerGymDetailsController::class, 'facilities'])
             ->name('gyms.facilities.update');
+
         Route::put('gyms/{gym}/activities', [OwnerGymDetailsController::class, 'activities'])
             ->name('gyms.activities.update');
+
         Route::post('gyms/{gym}/memberships', [OwnerGymDetailsController::class, 'storeMembership'])
             ->name('gyms.memberships.store');
+
         Route::delete('gyms/{gym}/memberships/{membership}', [OwnerGymDetailsController::class, 'destroyMembership'])
             ->name('gyms.memberships.destroy');
+
         Route::post('gyms/{gym}/hours', [OwnerGymDetailsController::class, 'storeHour'])
             ->name('gyms.hours.store');
+
         Route::delete('gyms/{gym}/hours/{hour}', [OwnerGymDetailsController::class, 'destroyHour'])
             ->name('gyms.hours.destroy');
+
         Route::post('gyms/{gym}/images', [OwnerGymDetailsController::class, 'storeImage'])
             ->name('gyms.images.store');
+
         Route::delete('gyms/{gym}/images/{image}', [OwnerGymDetailsController::class, 'destroyImage'])
             ->name('gyms.images.destroy');
     });
 
+// User routes
 Route::middleware(['auth', 'verified', 'role:1'])->group(function () {
     Route::get('/gyms', [GymDirectoryController::class, 'index'])->name('gyms.index');
     Route::get('/gyms/compare', [GymDirectoryController::class, 'compare'])->name('gyms.compare');
@@ -332,13 +337,27 @@ Route::middleware(['auth', 'verified', 'role:1'])->group(function () {
     Route::delete('/reminders/{reminder}', [ReminderController::class, 'destroy'])->name('reminders.destroy');
 });
 
+// Admin routes
 Route::middleware(['auth', 'verified', 'role:3'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::get('/gyms', [AdminGymController::class, 'index'])->name('gyms.index');
-        Route::get('/gyms/{gym}', [AdminGymController::class, 'show'])->name('gyms.show');
-        Route::patch('/gyms/{gym}/status', [AdminGymController::class, 'updateStatus'])->name('gyms.status');
+        Route::get('/gyms', [AdminGymController::class, 'index'])
+            ->name('gyms.index');
+
+        Route::get('/gyms/{gym}', [AdminGymController::class, 'show'])
+            ->name('gyms.show');
+
+        Route::patch('/gyms/{gym}/status', [AdminGymController::class, 'updateStatus'])
+            ->name('gyms.status');
+
+        // عرض وثيقة رسمية - للأدمن فقط
+        Route::get('/gyms/{gym}/documents/{document}', [AdminGymController::class, 'showDocument'])
+            ->name('gyms.documents.show');
+
+        // مراجعة وثيقة رسمية - للأدمن فقط
+        Route::patch('/gyms/{gym}/documents/{document}/status', [AdminGymController::class, 'updateDocumentStatus'])
+            ->name('gyms.documents.status');
     });
 
 require __DIR__ . '/auth.php';

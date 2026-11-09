@@ -39,11 +39,21 @@ class Gym extends Model
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');
     }
-
     public function images(): HasMany
     {
         return $this->hasMany(GymImage::class, 'gym_id', 'gym_id');
     }
+
+
+    public function verificationDocuments(): HasMany
+    {
+        return $this->hasMany(
+            GymVerificationDocument::class,
+            'gym_id',
+            'gym_id'
+        );
+    }
+
 
     public function favoritedByUsers(): BelongsToMany
     {
